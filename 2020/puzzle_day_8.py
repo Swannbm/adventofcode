@@ -6,6 +6,8 @@ class InfiniteLoopException(Exception):
 
 
 class Instruction:
+    accu = 0
+
     def __init__(self, row):
         """
             nop +0
@@ -44,6 +46,15 @@ class Instruction:
             return self.value
         return 0
 
+    def switch(self):
+        if self.instruction not in ["nop", "jmp"]:
+            return False
+        if self.instruction == "nop":
+            self.instruction = "jmp"
+        else:
+            self.instruction = "nop"
+        return True
+
     def __str__(self):
         return f"{self.index}: {self.instruction} {self.value}"
 
@@ -51,29 +62,37 @@ class Instruction:
         return self.__str__()
 
     @classmethod
-    def init(cls):
+    def init(cls, switch_index=None):
+        switch_done = True if switch_index is None else False
         instructions = list(Input(day=8).iter(cls))
         for i, inst in enumerate(instructions):
+            if switch_done is False and i >= switch_index:
+                if inst.switch():
+                    switch_done = True
             inst.init_next(i, instructions)
         return instructions[0]
 
     @classmethod
-    def run(cls, raise_exception=False):
-        inst = cls.init()
-        accu = 0
+    def run(cls, raise_exception=False, switch_index=None):
+        inst = cls.init(switch_index=switch_index)
+        cls.accu = inst.accumulate()
         while inst.next:
             inst = inst.next
-            accu += inst.accumulate()
-            yield accu
+            cls.accu += inst.accumulate()
 
 
-accu = 0
 try:
-    for accu in Instruction.run():
-        pass
+    Instruction.run()
 except InfiniteLoopException:
-    print(f"Part 1: {accu}")
+    print(f"Part 1: {Instruction.accu}")
 
-accu = 0
+good_end = False
+switch_index = 0
+while good_end is False:
+    try:
+        Instruction.run(switch_index=switch_index)
+        good_end = True
+    except InfiniteLoopException:
+        switch_index += 1
 
-print(f"Part 2: {accu}")
+print(f"Part 2: {Instruction.accu}")
