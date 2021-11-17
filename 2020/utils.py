@@ -2,8 +2,6 @@ from pathlib import Path
 
 
 class Input:
-    subfolder = "inputs"
-
     def __init__(self, day=1, **kwargs):
         self.day = day
 
@@ -12,11 +10,12 @@ class Input:
 
     def path(self):
         path = Path(__file__).parent
-        return path / self.subfolder / self.get_filename()
+        return path / "inputs" / self.get_filename()
 
     def get_content(self):
         with open(self.path(), "r") as file:
-            return file.read().split("\n")
+            content = file.read().split("\n")
+        return [_ for _ in content if _ != ""]
 
     def get_int(self):
         return list(map(int, self.get_content()))
