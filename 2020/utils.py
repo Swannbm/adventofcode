@@ -12,10 +12,15 @@ class Input:
         path = Path(__file__).parent
         return path / "inputs" / self.get_filename()
 
+    def keep_line(self, row):
+        if row == "":
+            return False
+        return True
+
     def get_content(self):
         with open(self.path(), "r") as file:
             content = file.read().split("\n")
-        return [_ for _ in content if _ != ""]
+        return [_ for _ in content if self.keep_line(_)]
 
     def get_int(self):
         return list(map(int, self.get_content()))
