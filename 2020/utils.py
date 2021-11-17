@@ -28,3 +28,19 @@ class Input:
     def iter(self, klass):
         for row in self.get_content():
             yield klass(row)
+
+
+class InputGrouped(Input):
+    def keep_line(self, row):
+        return True
+
+    def get_objects(self, klass):
+        items = []
+        input = []
+        for row in self.get_content():
+            if row == "":
+                items.append(klass(" ".join(input)))
+                input = []
+            else:
+                input.append(row)
+        return items
