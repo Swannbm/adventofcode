@@ -4,24 +4,26 @@ from more_itertools import windowed
 
 class Increasing(Input):
     def count_increasing_row(self):
-        increase = 0
-        rows = self.get_content()
-        for i in range(1, len(rows)):
-            if rows[i - 1] < rows[i]:
-                increase += 1
-        return increase
+        windows = list(windowed(self.get_int(), 2))
+        good_windows = [(a, b) for a, b in windows if b > a]
+        cpt = len(good_windows)
+        return cpt
 
-    def window(self):
-        windows = list(windowed(self.get_content(), 2))
-        return windows
+    def part2(self):
+        windows = list(windowed(self.get_int(), 3))
+        summed = []
+        for triplet in windows:
+            if len(triplet) == 3:
+                summed.append(sum(triplet))
+        windows = list(windowed(summed, 2))
+        good_windows = [(a, b) for a, b in windows if b > a]
+        cpt = len(good_windows)
+        return cpt
 
 
 input = Increasing(day=1)
 increased = input.count_increasing_row()
 print(f"Part one: {increased}")
 
-windows = input.window()
-good_windows = [(a, b) for a, b in windows if b > a]
-cpt = len(good_windows)
 
-print(cpt)
+print(f"Part two: {input.part2()}")
