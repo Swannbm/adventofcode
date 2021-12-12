@@ -23,10 +23,15 @@ class Input:
             return False
         return True
 
-    def get_content(self):
+    def get_raw_content(self):
         with open(self.path(), "r") as file:
-            content = file.read().split("\n")
-        return [_ for _ in content if self.keep_line(_)]
+            self.content = file.read()
+        return self.content
+
+    def get_content(self):
+        content = self.get_raw_content().split("\n")
+        self.rows = [_ for _ in content if self.keep_line(_)]
+        return self.rows
 
     def get_int(self):
         return list(map(int, self.get_content()))
@@ -72,3 +77,42 @@ class WebInput(Input):
         if not self.path().exists() or force_download:
             self.get_remote_input()
         return super().get_content()
+
+    @classmethod
+    def init(self, day):
+        WebInput(day=day, test=True).get_content()
+        WebInput(day=day).get_content(force_download=True)
+
+
+class Cell:
+    def __init__(self, x, y, value=None):
+        self.x = x
+        self.y = y
+        self.value = value
+        self.adjacents = []
+
+    def set_adjacents(self, cells, diag=False):
+        adjacents = [
+            (-1, 0),  # gauche
+            (1, 0),  # droite
+            (0, -1),  # haut
+            (0, 1),  # bas
+        ]
+        if diag:
+            adjacents += [
+                (-1, -1),  # gauche / haut
+                (-1, 1),  # gauche / bas
+                (1, -1),  # droite / haut
+                (1, 1),  # droite / bas
+            ]
+        for i, j in adjacents:
+            pos = (self.x + i, self.y + j)
+            if pos in cells.keys():
+                self.adjacents.append(cells[pos])
+
+    def __repr__(self):
+        return f"({self.x},{self.y}){self.__str__()}"
+
+    def __str__(self):
+        adj = "".join([str(c.value) for c in self.adjacents])
+        return f"{self.value}({adj})"
