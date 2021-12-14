@@ -76,7 +76,11 @@ class WebInput(Input):
     def get_content(self, force_download=False):
         if not self.path().exists() or force_download:
             self.get_remote_input()
-        return super().get_content()
+        rows = super().get_content()
+        if len(rows) == 1 and rows[0].startswith("Please don't repeatedly"):
+            self.get_remote_input()
+            return super().get_content()
+        return rows
 
     @classmethod
     def init(self, day):
