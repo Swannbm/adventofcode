@@ -115,8 +115,7 @@ class Cell:
                 self.adjacents.append(cells[pos])
 
     def __repr__(self):
-        return f"({self.x},{self.y}){self.__str__()}"
+        return self.__str__()
 
     def __str__(self):
-        adj = "".join([str(c.value) for c in self.adjacents])
-        return f"{self.value}({adj})"
+        return f"({self.x},{self.y})"
