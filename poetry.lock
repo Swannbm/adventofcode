@@ -1,4 +1,12 @@
 [[package]]
+name = "bitarray"
+version = "2.3.4"
+description = "efficient arrays of booleans -- C extension"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "certifi"
 version = "2021.10.8"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -186,9 +194,12 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.6"
-content-hash = "5ab1423b330ae5902c4852cf260d16cacacdbc36182daf0dd551364253c0e62f"
+content-hash = "f1050207ad8ef3404014d00196126301db5cce3a76ee4c90e9350cf12b52aa0a"
 
 [metadata.files]
+bitarray = [
+    {file = "bitarray-2.3.4.tar.gz", hash = "sha256:f19c62425576d3d1821ed711b94d1a4e5ede8f05ca121e99b6d978ed49c7a765"},
+]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
     {file = "certifi-2021.10.8.tar.gz", hash = "sha256:78884e7c1d4b00ce3cea67b44566851c4343c120abd683433ce934a68ea58872"},
